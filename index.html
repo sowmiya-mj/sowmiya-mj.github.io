@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sowmiya M J — App Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0E1219;
+    --surface: #161B25;
+    --surface-raised: #1C2230;
+    --border: #262E3D;
+    --text: #EDEEF2;
+    --text-muted: #8A93A6;
+    --accent: #E8483B;
+    --accent-dim: #E8483B33;
+    --teal: #4FD1C5;
+    --teal-dim: #4FD1C533;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--accent-dim); color:var(--text); }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* background grid texture */
+  .bg-grid{
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity:0.25;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter: blur(12px);
+    background: rgba(14,18,25,0.75);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:64px;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-dim);
+  }
+  .nav-links{
+    display:flex;
+    gap:32px;
+    font-size:14px;
+    color:var(--text-muted);
+  }
+  .nav-links a{ transition:color 0.2s; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{
+    font-family:var(--font-mono);
+    font-size:12px;
+    padding:8px 16px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--text);
+    transition:border-color 0.2s, background 0.2s;
+  }
+  .nav-cta:hover{ border-color:var(--accent); background:var(--accent-dim); }
+
+  @media (max-width:720px){
+    .nav-links{ display:none; }
+  }
+
+  /* ===== HERO ===== */
+  header.hero{
+    position:relative;
+    padding:120px 0 100px;
+    z-index:1;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--teal);
+    letter-spacing:0.04em;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px; height:1px;
+    background:var(--teal);
+  }
+  h1.name{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 76px);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    margin-bottom:24px;
+  }
+  h1.name .accent-word{ color:var(--accent); }
+  .hero-desc{
+    max-width:560px;
+    font-size:18px;
+    color:var(--text-muted);
+    margin-bottom:36px;
+  }
+  .hero-desc strong{ color:var(--text); font-weight:500; }
+
+  .status-ticker{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:100px;
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--text-muted);
+    margin-bottom:44px;
+  }
+  .pulse{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:#4ADE80;
+    position:relative;
+    flex-shrink:0;
+  }
+  .pulse::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:#4ADE80;
+    animation:pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+  @keyframes pulse-ring{
+    0%{ transform:scale(1); opacity:0.7; }
+    100%{ transform:scale(2.8); opacity:0; }
+  }
+  .status-ticker .status-text strong{ color:var(--text); font-weight:500; }
+
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--font-body);
+    font-size:14px;
+    font-weight:600;
+    padding:13px 24px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px -8px var(--accent-dim); }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--text-muted); transform:translateY(-2px); }
+
+  /* ===== SECTION LABEL ===== */
+  .section{ padding:88px 0; position:relative; z-index:1; border-top:1px solid var(--border); }
+  .section-head{ margin-bottom:48px; }
+  .section-num{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  .section-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(26px,4vw,36px);
+    letter-spacing:-0.01em;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:64px;
+  }
+  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; gap:40px; } }
+  .about-text p{ color:var(--text-muted); font-size:16px; margin-bottom:18px; }
+  .about-text strong{ color:var(--text); font-weight:500; }
+
+  .readout{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:24px;
+  }
+  .readout-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+  }
+  .readout-row:last-child{ border-bottom:none; }
+  .readout-label{ color:var(--text-muted); font-family:var(--font-mono); font-size:12px; }
+  .readout-value{ font-weight:500; text-align:right; }
+  .readout-value .cgpa{ color:var(--teal); font-family:var(--font-mono); font-size:13px; margin-left:6px; }
+
+  /* ===== EXPERIENCE ===== */
+  .timeline{ position:relative; padding-left:32px; }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:5px; top:6px; bottom:6px;
+    width:1px;
+    background:var(--border);
+  }
+  .tl-item{ position:relative; margin-bottom:48px; }
+  .tl-item:last-child{ margin-bottom:0; }
+  .tl-dot{
+    position:absolute;
+    left:-32px; top:4px;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--accent);
+  }
+  .tl-item.current .tl-dot{ border-color:#4ADE80; }
+  .tl-role{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:19px;
+    margin-bottom:4px;
+  }
+  .tl-meta{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-muted);
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+  .tl-meta .tag{
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:3px 9px;
+    border-radius:100px;
+  }
+  .tl-meta .tag.live{ color:#4ADE80; border-color:#4ADE8033; }
+  .tl-list{ list-style:none; color:var(--text-muted); font-size:15px; }
+  .tl-list li{ padding-left:18px; position:relative; margin-bottom:8px; }
+  .tl-list li::before{
+    content:'—';
+    position:absolute; left:0; color:var(--text-muted);
+  }
+
+  /* ===== PROJECTS ===== */
+  .project-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .project-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:32px;
+    transition:border-color 0.25s, transform 0.25s;
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:32px;
+  }
+  @media (max-width:760px){ .project-card{ grid-template-columns:1fr; } }
+  .project-card:hover{ border-color:var(--accent); transform:translateY(-3px); }
+
+  .project-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:14px;
+  }
+  .project-name{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:22px;
+  }
+  .project-link{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--teal);
+    border:1px solid var(--teal-dim);
+    padding:5px 12px;
+    border-radius:100px;
+    white-space:nowrap;
+    transition:background 0.2s;
+  }
+  .project-link:hover{ background:var(--teal-dim); }
+  .project-stack{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-muted);
+    margin-bottom:16px;
+  }
+  .project-desc{ color:var(--text-muted); font-size:15px; }
+
+  .project-stats{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    justify-content:center;
+    border-left:1px solid var(--border);
+    padding-left:32px;
+  }
+  @media (max-width:760px){ .project-stats{ border-left:none; padding-left:0; border-top:1px solid var(--border); padding-top:20px; flex-direction:row; flex-wrap:wrap; } }
+  .stat{ }
+  .stat-num{
+    font-family:var(--font-mono);
+    font-size:22px;
+    font-weight:500;
+    color:var(--accent);
+    line-height:1;
+  }
+  .stat-label{
+    font-size:12px;
+    color:var(--text-muted);
+    margin-top:4px;
+  }
+
+  /* ===== SKILLS ===== */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  @media (max-width:760px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-group{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:24px;
+  }
+  .skill-group-title{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--teal);
+    margin-bottom:16px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tag{
+    font-size:13px;
+    padding:6px 12px;
+    background:var(--surface-raised);
+    border:1px solid var(--border);
+    border-radius:6px;
+  }
+
+  /* ===== CONTACT / FOOTER ===== */
+  .contact-section{
+    padding:100px 0 60px;
+    text-align:center;
+    position:relative;
+    z-index:1;
+    border-top:1px solid var(--border);
+  }
+  .contact-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(32px,5vw,52px);
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  .contact-title .accent-word{ color:var(--accent); }
+  .contact-sub{ color:var(--text-muted); margin-bottom:40px; font-size:16px; }
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:80px;
+  }
+  footer{
+    text-align:center;
+    padding:24px 0;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-muted);
+    border-top:1px solid var(--border);
+  }
+
+  /* scroll reveal */
+  .reveal{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .pulse::after{ animation:none; }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>SM</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="mailto:sowmiyamahalingam.mj@gmail.com">Say Hello</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">APP DEVELOPER · FLUTTER · FIREBASE</div>
+    <h1 class="name">Sowmiya M J<br>builds systems that <span class="accent-word">run live.</span></h1>
+    <p class="hero-desc">I develop <strong>real-time Flutter &amp; Firebase applications</strong> — from a payroll system actively processing salaries for college staff, to a multi-role blood donation coordinator with live SOS matching. Currently pursuing my MCA while building in production.</p>
+
+    <div class="status-ticker">
+      <span class="pulse"></span>
+      <span class="status-text">Currently building at <strong>Akshayam 360</strong> — Staff Salary System live in production</span>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#projects">View Projects →</a>
+      <a class="btn btn-ghost" href="#" id="resume-link">Download Resume</a>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">01 / About</div>
+      <div class="section-title">Detail-oriented, built for production</div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a Master's student and app developer based in <strong>Anthiyur, Erode, Tamil Nadu</strong>, working across the full lifecycle of mobile applications — design, development, testing, and deployment.</p>
+        <p>My focus is <strong>real-time systems</strong>: apps where data has to sync correctly, instantly, and under real usage. My Staff Salary Management System is actively used by college administration for payroll — not a demo, a system people depend on. My mini-project, BloodLink, coordinates blood donation across five different user roles with live SOS request matching.</p>
+        <p>I care about getting the architecture right before the UI looks nice — clean state management, atomic transactions where correctness matters, and interfaces that hold up under real data.</p>
+      </div>
+      <div class="readout reveal">
+        <div class="readout-row">
+          <span class="readout-label">MCA</span>
+          <span class="readout-value">P.K.R Arts College for Women <span class="cgpa">9.25 CGPA</span></span>
+        </div>
+        <div class="readout-row">
+          <span class="readout-label">B.SC IT</span>
+          <span class="readout-value">P.K.R Arts College for Women <span class="cgpa">8.26 CGPA</span></span>
+        </div>
+        <div class="readout-row">
+          <span class="readout-label">LOCATION</span>
+          <span class="readout-value">Anthiyur, Erode (DT), TN</span>
+        </div>
+        <div class="readout-row">
+          <span class="readout-label">LANGUAGES</span>
+          <span class="readout-value">Tamil · English</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">02 / Experience</div>
+      <div class="section-title">Where I've built</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item current reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-role">App Developer Intern</div>
+        <div class="tl-meta">
+          <span class="tag">Akshayam 360 Global Learning System</span>
+          <span class="tag live">● 6 months, ongoing</span>
+        </div>
+        <ul class="tl-list">
+          <li>Built the Staff Salary Management System — a real-time Flutter + Firebase desktop app in active production use by college administration for payroll processing.</li>
+          <li>Currently developing an additional application as part of the organization's app portfolio.</li>
+          <li>Own the full app lifecycle: design, development, testing, and deployment.</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Flutter Developer Intern</div>
+        <div class="tl-meta">
+          <span class="tag">Poeage Technology</span>
+          <span class="tag">3 months</span>
+        </div>
+        <ul class="tl-list">
+          <li>Developed responsive, cross-platform screens for a live multi-vendor e-commerce app.</li>
+          <li>Implemented Riverpod state management for a scalable, maintainable architecture.</li>
+          <li>Integrated Firebase Authentication and Cloud Firestore for secure, real-time data handling.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">03 / Projects</div>
+      <div class="section-title">Things I've shipped</div>
+    </div>
+    <div class="project-grid">
+
+      <div class="project-card reveal">
+        <div class="project-main">
+          <div class="project-top">
+            <div class="project-name">BloodLink</div>
+            <a class="project-link" href="https://github.com/sowmiya-mj" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+          <div class="project-stack">Flutter · Firebase · Nominatim (OpenStreetMap)</div>
+          <p class="project-desc">A multi-role blood donation coordination app for Donor, Recipient, Hospital, Blood Bank, and Doctor roles. Real-time SOS blood requests use atomic Firestore transactions to safely handle multiple donors accepting the same request. Nearby matching runs on the Haversine formula against live geocoded locations, with donor eligibility tracking and verified donation history.</p>
+        </div>
+        <div class="project-stats">
+          <div class="stat"><div class="stat-num">5</div><div class="stat-label">user roles</div></div>
+          <div class="stat"><div class="stat-num">50km</div><div class="stat-label">SOS match radius</div></div>
+          <div class="stat"><div class="stat-num">live</div><div class="stat-label">donor matching</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-main">
+          <div class="project-top">
+            <div class="project-name">Staff Salary Management System</div>
+            <a class="project-link" href="https://github.com/sowmiya-mj" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+          <div class="project-stack">Flutter · Dart · Firebase Auth · Cloud Firestore</div>
+          <p class="project-desc">A production payroll system for Akshayam 360, calculating salaries from CL, OD, LCL, LLP, PF, ESI, TDS, and attendance data. Full salary history and payroll records are stored in Firestore, with a role-secured admin interface built to handle large scrolling payroll tables across departments.</p>
+        </div>
+        <div class="project-stats">
+          <div class="stat"><div class="stat-num">9</div><div class="stat-label">departments</div></div>
+          <div class="stat"><div class="stat-num">7</div><div class="stat-label">salary components</div></div>
+          <div class="stat"><div class="stat-num">prod</div><div class="stat-label">in active use</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-main">
+          <div class="project-top">
+            <div class="project-name">PoeageHub</div>
+            <a class="project-link" href="https://github.com/sowmiya-mj" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+          <div class="project-stack">Flutter · Firebase · Riverpod</div>
+          <p class="project-desc">A multi-vendor e-commerce platform built during my internship at Poeage Technology, with separate Seller, Admin, and User interfaces on a shared scalable architecture. I worked on authentication, inventory and order management, notification systems, and real-time CRUD sync via Cloud Firestore.</p>
+        </div>
+        <div class="project-stats">
+          <div class="stat"><div class="stat-num">3</div><div class="stat-label">panels</div></div>
+          <div class="stat"><div class="stat-num">real-time</div><div class="stat-label">Firestore sync</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">04 / Skills</div>
+      <div class="section-title">What I work with</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Dart</span>
+          <span class="skill-tag">HTML</span>
+          <span class="skill-tag">CSS</span>
+          <span class="skill-tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-title">Frameworks &amp; Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Flutter</span>
+          <span class="skill-tag">Riverpod</span>
+          <span class="skill-tag">Firebase Auth</span>
+          <span class="skill-tag">Cloud Firestore</span>
+          <span class="skill-tag">Firebase Storage</span>
+          <span class="skill-tag">Git &amp; GitHub</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-title">Areas of Interest</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Artificial Intelligence</span>
+          <span class="skill-tag">Machine Learning</span>
+          <span class="skill-tag">IoT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="contact-title">Let's build something <span class="accent-word">real-time.</span></div>
+      <p class="contact-sub">Open to Flutter developer roles and app development opportunities.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:sowmiyamahalingam.mj@gmail.com">Email Me</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/sowmiya-mj" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn btn-ghost" href="https://github.com/sowmiya-mj" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Sowmiya M J · Anthiyur, Erode, Tamil Nadu · Built with Flutter in the heart, HTML on the page
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // resume link placeholder - user should replace with actual hosted resume URL
+  document.getElementById('resume-link').addEventListener('click', function(e){
+    e.preventDefault();
+    alert('Resume PDF-ah upload panni, indha button-oda href-ah update pannunga (e.g., resume.pdf link).');
+  });
+</script>
+
+</body>
+</html>
